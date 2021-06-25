@@ -40,6 +40,6 @@ export const skills = [
   "SQL",
   "Power BI",
   "Tableau",
-  "Neo4J",
+  "Python",
   "Cassandara",
 ];
