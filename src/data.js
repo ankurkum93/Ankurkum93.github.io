@@ -36,10 +36,10 @@ export const projects = [
 
 
 export const skills = [
-  "Apache NiFi",
   "SQL",
+  "Python",
   "Power BI",
   "Tableau",
-  "Python",
+  "Apache NiFi",
   "Cassandara",
 ];
