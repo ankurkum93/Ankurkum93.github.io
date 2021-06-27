@@ -31,6 +31,15 @@ export const projects = [
     image: "./project-4.jpg",
     link: "https://github.com/ankurkum93/MavenChallenge",
   },
+  {
+    title: "Movie Recommender System",
+    subtitle: "Python",
+    description:
+      "I have used content based and collaborative filtering to make the recommendation engine",
+    image: "./project-5.png",
+    link: "https://github.com/ankurkum93/Data-Mining",
+  },
+  
 ];
 
 
