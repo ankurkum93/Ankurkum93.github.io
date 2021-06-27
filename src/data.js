@@ -35,7 +35,7 @@ export const projects = [
     title: "Movie Recommender System",
     subtitle: "Python",
     description:
-      "I have used content based and collaborative filtering to make the recommendation engine",
+      "I have used content based and collaborative filtering to make the movie recommendation engine",
     image: "./project-5.png",
     link: "https://github.com/ankurkum93/Data-Mining",
   },
