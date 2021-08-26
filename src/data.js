@@ -42,10 +42,9 @@ export const projects = [
   {
     title: "Maven Analytics Report",
     subtitle: "Power BI",
-    description:
-      "I have used content based and collaborative filtering to make the movie recommendation engine",
+    description:"I have used Power Bi for this visualisation",
     image: "./Project-6.png",
-    link: "<iframe width='600' height='486' src='https://app.powerbi.com/view?r=eyJrIjoiMmZiN2I5MzctYTkyNi00ZGVlLTkxMzUtOGVjM2Q5NjFhYzI5IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9' frameborder='0' allowFullScreen='true'></iframe>",
+    link:"https://app.powerbi.com/view?r=eyJrIjoiMmZiN2I5MzctYTkyNi00ZGVlLTkxMzUtOGVjM2Q5NjFhYzI5IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection4d539820a08983994be8" ,
   },
 ];
 
