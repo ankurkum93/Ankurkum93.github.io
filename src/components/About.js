@@ -9,8 +9,8 @@ export default function About() {
       <br className="hidden lg:inline-block" />I love to build and deploy Business Intelligence Models.
     </h1>
     <p className="mb-8 leading-relaxed">
-      Data Engineering Intern with an experience as a Business Analyst of more than 3 years.
-      Love to create Data Pipelines using NiFi, analysing the data with various flavours of SQL and then visualizing it in Power BI and Tableau.
+      Data Engineer with an experience as a Business Analyst of more than 3 years.
+      Love to create Data Pipelines using NiFi, analysing the data with various flavours of SQL and then visualizing it in Power BI & Tableau.
     </p>
     <div className="flex justify-center">
       <a
