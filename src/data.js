@@ -39,7 +39,14 @@ export const projects = [
     image: "./project-5.png",
     link: "https://github.com/ankurkum93/Data-Mining",
   },
-  
+  {
+    title: "Maven Analytics Report",
+    subtitle: "Power BI",
+    description:
+      "I have used content based and collaborative filtering to make the movie recommendation engine",
+    image: "./Project-6.png",
+    link: "<iframe width='600' height='486' src='https://app.powerbi.com/view?r=eyJrIjoiMmZiN2I5MzctYTkyNi00ZGVlLTkxMzUtOGVjM2Q5NjFhYzI5IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9' frameborder='0' allowFullScreen='true'></iframe>",
+  },
 ];
 
 
