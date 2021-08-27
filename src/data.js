@@ -12,7 +12,7 @@ export const projects = [
     subtitle: "Excel, SQL and Power BI",
     description:
       "This was an online dataset of Toy sales in Mexico from the year 1994-2018. I cleaned the data in Excel and transformation is done partly in SQL and Partly in Power BI",
-    image: "./project-4.jpg",
+    image: "./Project-6.png",
     link: "https://app.powerbi.com/view?r=eyJrIjoiMmZiN2I5MzctYTkyNi00ZGVlLTkxMzUtOGVjM2Q5NjFhYzI5IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection4d539820a08983994be8" ,
   },
   
