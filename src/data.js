@@ -1,5 +1,23 @@
 export const projects = [
   {
+    title: "Covid-19 Report",
+    subtitle: "Apache Nifi, SQL, Power BI",
+    description:"I have used NiFi to maintain the data flow, SQL for transformation and Power Bi for this visualisation",
+    image: "./Project-7.png",
+    link:"https://app.powerbi.com/view?r=eyJrIjoiODQxZjNmZmItNTA2OS00NmY3LWJhODQtMjM5N2QyN2RiYzg4IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection1c349ce01cc14d856c35" ,
+  },
+  
+  {
+    title: "Maven Toys Challenge",
+    subtitle: "Excel, SQL and Power BI",
+    description:
+      "This was an online dataset of Toy sales in Mexico from the year 1994-2018. I cleaned the data in Excel and transformation is done partly in SQL and Partly in Power BI",
+    image: "./project-4.jpg",
+    link: "https://app.powerbi.com/view?r=eyJrIjoiMmZiN2I5MzctYTkyNi00ZGVlLTkxMzUtOGVjM2Q5NjFhYzI5IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection4d539820a08983994be8" ,
+  },
+  
+  
+  {
     title: "SQL-Portfolio Project",
     subtitle: "Danny's Diner",
     description:
@@ -23,14 +41,7 @@ export const projects = [
     image: "./project-3.jpg",
     link: "https://github.com/ankurkum93/Data-Warehousing",
   },
-  {
-    title: "Maven Toys Challenge",
-    subtitle: "Excel, SQL and Power BI",
-    description:
-      "This was an online dataset of Toy sales in Mexico from the year 1994-2018. I cleaned the data in Excel and transformation is done partly in SQL and Partly in Power BI",
-    image: "./project-4.jpg",
-    link: "https://app.powerbi.com/view?r=eyJrIjoiMmZiN2I5MzctYTkyNi00ZGVlLTkxMzUtOGVjM2Q5NjFhYzI5IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection4d539820a08983994be8" ,
-  },
+  
   {
     title: "Movie Recommender System",
     subtitle: "Python",
@@ -39,13 +50,7 @@ export const projects = [
     image: "./project-5.png",
     link: "https://github.com/ankurkum93/Data-Mining",
   },
-  {
-    title: "Covid-19 Report",
-    subtitle: "Apache Nifi, SQL, Power BI",
-    description:"I have used NiFi to maintain the data flow, SQL for transformation and Power Bi for this visualisation",
-    image: "./Project-7.png",
-    link:"https://app.powerbi.com/view?r=eyJrIjoiODQxZjNmZmItNTA2OS00NmY3LWJhODQtMjM5N2QyN2RiYzg4IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection1c349ce01cc14d856c35" ,
-  },
+  
 ];
 
 
