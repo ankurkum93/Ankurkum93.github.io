@@ -1,0 +1,871 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankur Kumar - Senior Data Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'space': ['Space Grotesk', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'dark-navy': '#0B1426',
+                        'deep-purple': '#1A0B2E',
+                        'electric-blue': '#00D4FF',
+                        'neon-purple': '#8B5CF6',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        };
+    </script>
+    
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #00D4FF; }
+            to { box-shadow: 0 0 30px #8B5CF6, 0 0 40px #8B5CF6; }
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #00D4FF 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .skill-bar {
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .project-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00D4FF;
+            border-radius: 50%;
+            animation: float 8s linear infinite;
+        }
+        
+        .scroll-indicator {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+        
+        .scroll-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .scroll-dot.active {
+            background: #00D4FF;
+            transform: scale(1.5);
+        }
+        
+        #three-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-dark-navy via-deep-purple to-dark-navy text-white font-inter overflow-x-hidden">
+
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator hidden lg:block">
+        <div class="scroll-dot active" data-section="hero"></div>
+        <div class="scroll-dot" data-section="about"></div>
+        <div class="scroll-dot" data-section="skills"></div>
+        <div class="scroll-dot" data-section="projects"></div>
+        <div class="scroll-dot" data-section="contact"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-effect">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="font-space text-2xl font-bold gradient-text">
+                    Ankur Kumar
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#hero" class="nav-link hover:text-electric-blue transition-colors">Home</a>
+                    <a href="#about" class="nav-link hover:text-electric-blue transition-colors">About</a>
+                    <a href="#skills" class="nav-link hover:text-electric-blue transition-colors">Skills</a>
+                    <a href="#projects" class="nav-link hover:text-electric-blue transition-colors">Projects</a>
+                    <a href="#contact" class="nav-link hover:text-electric-blue transition-colors">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-white focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen relative flex items-center justify-center overflow-hidden">
+        <canvas id="three-canvas"></canvas>
+        
+        <div class="hero-content container mx-auto px-6 text-center">
+            <div class="animate-fade-in">
+                <h1 class="font-space text-5xl md:text-7xl font-bold mb-6">
+                    Hi, I'm <span class="gradient-text">Ankur</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-gray-300 max-w-3xl mx-auto">
+                    Senior Data Engineer with 3+ years of experience building scalable data pipelines and ML models. 
+                    I love to create <span class="gradient-text font-semibold">Data Pipelines</span> and deploy 
+                    <span class="gradient-text font-semibold">Data Models</span>.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#projects" class="glass-effect px-8 py-4 rounded-full font-semibold hover:bg-white hover:bg-opacity-20 transition-all duration-300 animate-glow">
+                        <i class="fas fa-code mr-2"></i>See My Work
+                    </a>
+                    <a href="#contact" class="glass-effect px-8 py-4 rounded-full font-semibold hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+                        <i class="fas fa-envelope mr-2"></i>Work With Me
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Floating Elements -->
+            <div class="absolute top-20 left-10 animate-float">
+                <div class="w-16 h-16 bg-gradient-to-r from-electric-blue to-neon-purple rounded-lg opacity-20"></div>
+            </div>
+            <div class="absolute top-40 right-20 animate-float" style="animation-delay: -2s;">
+                <div class="w-8 h-8 bg-gradient-to-r from-neon-purple to-electric-blue rounded-full opacity-30"></div>
+            </div>
+            <div class="absolute bottom-40 left-20 animate-float" style="animation-delay: -4s;">
+                <div class="w-12 h-12 bg-gradient-to-r from-electric-blue to-neon-purple rounded-full opacity-25"></div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i class="fas fa-chevron-down text-2xl text-electric-blue"></i>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h2 class="font-space text-4xl md:text-5xl font-bold gradient-text">
+                        About Me
+                    </h2>
+                    <p class="text-lg text-gray-300 leading-relaxed">
+                        I'm a passionate Senior Data Engineer currently working at BID Company in Italy, where I execute 
+                        end-to-end migration projects for leading Italian banks using cutting-edge technologies like 
+                        Informatica, Hive, and Google Cloud Platform.
+                    </p>
+                    <p class="text-lg text-gray-300 leading-relaxed">
+                        Previously at HelloFresh Italia, I developed data pipelines that reduced processing time from 
+                        45 minutes to just 5 minutes, and created automated systems that saved countless hours of manual work.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 mt-8">
+                        <div class="glass-effect p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold gradient-text">3+</div>
+                            <div class="text-sm text-gray-400">Years Experience</div>
+                        </div>
+                        <div class="glass-effect p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold gradient-text">50+</div>
+                            <div class="text-sm text-gray-400">Projects Completed</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Resume Download -->
+                    <div class="mt-8">
+                        <a href="attached_assets/Resume_Senior_Data_Engineer_1753900296996.pdf" download class="inline-flex items-center glass-effect px-6 py-3 rounded-full font-semibold hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+                            <i class="fas fa-download mr-2"></i>Download Resume
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <!-- Modern tech workspace with multiple monitors showing data -->
+                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" alt="Modern tech workspace" class="rounded-2xl shadow-2xl w-full h-auto">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-navy via-transparent to-transparent rounded-2xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-space text-4xl md:text-5xl font-bold gradient-text mb-6">
+                    Skills & Technologies
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Extensive experience with cutting-edge data engineering tools and technologies acquired through 
+                    advanced projects in both academic and professional environments.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Data Engineering Tools -->
+                <div class="glass-effect p-6 rounded-2xl">
+                    <h3 class="font-space text-xl font-semibold mb-6 gradient-text">Data Engineering</h3>
+                    <div class="space-y-4">
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>Python</span>
+                                <span class="text-electric-blue">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>Apache Airflow</span>
+                                <span class="text-electric-blue">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>Docker</span>
+                                <span class="text-electric-blue">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>Kubernetes</span>
+                                <span class="text-electric-blue">80%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Database & Analytics -->
+                <div class="glass-effect p-6 rounded-2xl">
+                    <h3 class="font-space text-xl font-semibold mb-6 gradient-text">Database & Analytics</h3>
+                    <div class="space-y-4">
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>SQL (Oracle, PostgreSQL)</span>
+                                <span class="text-electric-blue">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>Power BI</span>
+                                <span class="text-electric-blue">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>Tableau</span>
+                                <span class="text-electric-blue">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>Apache Hive</span>
+                                <span class="text-electric-blue">80%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cloud & DevOps -->
+                <div class="glass-effect p-6 rounded-2xl">
+                    <h3 class="font-space text-xl font-semibold mb-6 gradient-text">Cloud & DevOps</h3>
+                    <div class="space-y-4">
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>AWS</span>
+                                <span class="text-electric-blue">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>GCP</span>
+                                <span class="text-electric-blue">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>Github</span>
+                                <span class="text-electric-blue">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span>Informatica</span>
+                                <span class="text-electric-blue">80%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-electric-blue to-neon-purple h-2 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-space text-4xl md:text-5xl font-bold gradient-text mb-6">
+                    Featured Projects
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    A showcase of data engineering projects that demonstrate my expertise in building scalable 
+                    pipelines, analytics dashboards, and machine learning solutions.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- COVID-19 Report Project -->
+                <div class="project-card glass-effect rounded-2xl overflow-hidden">
+                    <!-- Abstract data visualization background -->
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400" alt="Data visualization dashboard" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-1 bg-electric-blue bg-opacity-20 text-electric-blue text-xs rounded-full">Apache NiFi</span>
+                            <span class="px-2 py-1 bg-neon-purple bg-opacity-20 text-neon-purple text-xs rounded-full">SQL</span>
+                            <span class="px-2 py-1 bg-electric-blue bg-opacity-20 text-electric-blue text-xs rounded-full">Power BI</span>
+                        </div>
+                        <h3 class="font-space text-xl font-semibold mb-3">COVID-19 Analytics Dashboard</h3>
+                        <p class="text-gray-400 text-sm mb-4">
+                            Real-time COVID-19 data pipeline using NiFi for data flow, SQL for transformation, 
+                            and Power BI for interactive visualizations.
+                        </p>
+                        <a href="https://app.powerbi.com/view?r=eyJrIjoiODQxZjNmZmItNTA2OS00NmY3LWJhODQtMjM5N2QyN2RiYzg4IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection1c349ce01cc14d856c35" target="_blank" class="inline-flex items-center text-electric-blue hover:text-neon-purple transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>View Dashboard
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Maven Toys Challenge -->
+                <div class="project-card glass-effect rounded-2xl overflow-hidden">
+                    <!-- Business analytics visualization -->
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400" alt="Business analytics charts" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-1 bg-electric-blue bg-opacity-20 text-electric-blue text-xs rounded-full">Excel</span>
+                            <span class="px-2 py-1 bg-neon-purple bg-opacity-20 text-neon-purple text-xs rounded-full">SQL</span>
+                            <span class="px-2 py-1 bg-electric-blue bg-opacity-20 text-electric-blue text-xs rounded-full">Power BI</span>
+                        </div>
+                        <h3 class="font-space text-xl font-semibold mb-3">Maven Toys Sales Analysis</h3>
+                        <p class="text-gray-400 text-sm mb-4">
+                            Comprehensive analysis of toy sales data from Mexico (1994-2018) with data cleaning, 
+                            transformation, and interactive business intelligence dashboards.
+                        </p>
+                        <a href="https://app.powerbi.com/view?r=eyJrIjoiMmZiN2I5MzctYTkyNi00ZGVlLTkxMzUtOGVjM2Q5NjFhYzI5IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection4d539820a08983994be8" target="_blank" class="inline-flex items-center text-electric-blue hover:text-neon-purple transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>View Analysis
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Danny's Diner SQL Project -->
+                <div class="project-card glass-effect rounded-2xl overflow-hidden">
+                    <!-- Database schema visualization -->
+                    <img src="https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400" alt="Database schema design" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-1 bg-neon-purple bg-opacity-20 text-neon-purple text-xs rounded-full">SQL</span>
+                            <span class="px-2 py-1 bg-electric-blue bg-opacity-20 text-electric-blue text-xs rounded-full">Database Design</span>
+                        </div>
+                        <h3 class="font-space text-xl font-semibold mb-3">Danny's Diner SQL Analysis</h3>
+                        <p class="text-gray-400 text-sm mb-4">
+                            Complex SQL queries and joins on a STAR schema database to analyze customer behavior 
+                            and restaurant performance metrics.
+                        </p>
+                        <a href="https://github.com/ankurkum93/CaseStudy-SQL" target="_blank" class="inline-flex items-center text-electric-blue hover:text-neon-purple transition-colors">
+                            <i class="fab fa-github mr-2"></i>View Code
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Mobile Metro App -->
+                <div class="project-card glass-effect rounded-2xl overflow-hidden">
+                    <!-- 3D geometric abstract -->
+                    <img src="https://pixabay.com/get/g2e32f4c774c364f814db22ef262585754946ae5508e2292bf9545b4708c08285fa1f250357db507cfb52e2a8024f0e7bc76633530d6bac31044c06bc05082005_1280.jpg" alt="3D geometric network visualization" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-1 bg-neon-purple bg-opacity-20 text-neon-purple text-xs rounded-full">Cassandra</span>
+                            <span class="px-2 py-1 bg-electric-blue bg-opacity-20 text-electric-blue text-xs rounded-full">NoSQL</span>
+                        </div>
+                        <h3 class="font-space text-xl font-semibold mb-3">Mobile Metro Application</h3>
+                        <p class="text-gray-400 text-sm mb-4">
+                            Full-stack metro app with data generation, cleaning, ingestion into Cassandra NoSQL 
+                            database, and complex query optimization.
+                        </p>
+                        <a href="https://github.com/ankurkum93/ADM" target="_blank" class="inline-flex items-center text-electric-blue hover:text-neon-purple transition-colors">
+                            <i class="fab fa-github mr-2"></i>View Repository
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Bike MS Project -->
+                <div class="project-card glass-effect rounded-2xl overflow-hidden">
+                    <!-- Data pipeline visualization -->
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400" alt="Data pipeline network visualization" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-1 bg-electric-blue bg-opacity-20 text-electric-blue text-xs rounded-full">Spark</span>
+                            <span class="px-2 py-1 bg-neon-purple bg-opacity-20 text-neon-purple text-xs rounded-full">Hive</span>
+                            <span class="px-2 py-1 bg-electric-blue bg-opacity-20 text-electric-blue text-xs rounded-full">Tableau</span>
+                        </div>
+                        <h3 class="font-space text-xl font-semibold mb-3">Bike Share Data Warehouse</h3>
+                        <p class="text-gray-400 text-sm mb-4">
+                            Distributed data processing system using Spark and Hive for large-scale bike sharing 
+                            data with advanced analytics and Tableau visualizations.
+                        </p>
+                        <a href="https://github.com/ankurkum93/Data-Warehousing" target="_blank" class="inline-flex items-center text-electric-blue hover:text-neon-purple transition-colors">
+                            <i class="fab fa-github mr-2"></i>Explore Project
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Movie Recommender System -->
+                <div class="project-card glass-effect rounded-2xl overflow-hidden">
+                    <!-- AI/ML abstract visualization -->
+                    <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400" alt="Machine learning neural network visualization" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-1 bg-neon-purple bg-opacity-20 text-neon-purple text-xs rounded-full">Python</span>
+                            <span class="px-2 py-1 bg-electric-blue bg-opacity-20 text-electric-blue text-xs rounded-full">Machine Learning</span>
+                        </div>
+                        <h3 class="font-space text-xl font-semibold mb-3">Movie Recommendation Engine</h3>
+                        <p class="text-gray-400 text-sm mb-4">
+                            Advanced recommendation system implementing both content-based and collaborative 
+                            filtering algorithms for personalized movie suggestions.
+                        </p>
+                        <a href="https://github.com/ankurkum93/Data-Mining" target="_blank" class="inline-flex items-center text-electric-blue hover:text-neon-purple transition-colors">
+                            <i class="fab fa-github mr-2"></i>View Algorithm
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-space text-4xl md:text-5xl font-bold gradient-text mb-6">
+                    Let's Connect
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Ready to collaborate on your next data engineering project? Let's discuss how we can 
+                    transform your data into actionable insights.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="glass-effect p-6 rounded-2xl">
+                        <h3 class="font-space text-2xl font-semibold mb-6 gradient-text">Get In Touch</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-electric-blue to-neon-purple rounded-full flex items-center justify-center">
+                                    <i class="fas fa-envelope text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">Email</div>
+                                    <a href="mailto:ankurkum93@gmail.com" class="text-gray-400 hover:text-electric-blue transition-colors">
+                                        ankurkum93@gmail.com
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-electric-blue to-neon-purple rounded-full flex items-center justify-center">
+                                    <i class="fas fa-phone text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">Phone</div>
+                                    <a href="tel:+393474609701" class="text-gray-400 hover:text-electric-blue transition-colors">
+                                        +39 3474609701
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-electric-blue to-neon-purple rounded-full flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">Location</div>
+                                    <div class="text-gray-400">Genoa, Liguria, Italy</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="glass-effect p-6 rounded-2xl">
+                        <h3 class="font-space text-xl font-semibold mb-4 gradient-text">Connect With Me</h3>
+                        <div class="flex space-x-4">
+                            <a href="https://linkedin.com/in/ankurkum93" target="_blank" class="w-12 h-12 bg-gradient-to-r from-electric-blue to-neon-purple rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                <i class="fab fa-linkedin text-white text-xl"></i>
+                            </a>
+                            <a href="https://github.com/ankurkum93" target="_blank" class="w-12 h-12 bg-gradient-to-r from-electric-blue to-neon-purple rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                <i class="fab fa-github text-white text-xl"></i>
+                            </a>
+                            <a href="mailto:ankurkum93@gmail.com" class="w-12 h-12 bg-gradient-to-r from-electric-blue to-neon-purple rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                <i class="fas fa-envelope text-white text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <!-- Modern office space with technology -->
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" alt="Modern collaborative workspace" class="rounded-2xl shadow-2xl w-full h-auto">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-navy via-transparent to-transparent rounded-2xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-400">
+                © 2024 Ankur Kumar. Crafted with <span class="text-electric-blue">❤️</span> and lots of data.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        // Three.js 3D Hero Animation
+        let scene, camera, renderer, particles = [];
+        
+        function initThreeJS() {
+            const canvas = document.getElementById('three-canvas');
+            const heroSection = document.getElementById('hero');
+            
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Create floating geometric elements
+            const geometries = [
+                new THREE.BoxGeometry(1, 1, 1),
+                new THREE.SphereGeometry(0.5, 32, 32),
+                new THREE.OctahedronGeometry(0.7),
+                new THREE.TetrahedronGeometry(0.8)
+            ];
+            
+            for (let i = 0; i < 20; i++) {
+                const geometry = geometries[Math.floor(Math.random() * geometries.length)];
+                const material = new THREE.MeshBasicMaterial({
+                    color: Math.random() > 0.5 ? 0x00D4FF : 0x8B5CF6,
+                    transparent: true,
+                    opacity: 0.3,
+                    wireframe: true
+                });
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(
+                    (Math.random() - 0.5) * 50,
+                    (Math.random() - 0.5) * 50,
+                    (Math.random() - 0.5) * 50
+                );
+                mesh.rotation.set(
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI
+                );
+                
+                scene.add(mesh);
+                particles.push(mesh);
+            }
+            
+            camera.position.z = 30;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                particles.forEach((particle, index) => {
+                    particle.rotation.x += 0.01;
+                    particle.rotation.y += 0.01;
+                    particle.position.y += Math.sin(Date.now() * 0.001 + index) * 0.01;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            // Mouse movement interaction
+            let mouseX = 0, mouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                
+                camera.position.x = mouseX * 5;
+                camera.position.y = mouseY * 5;
+                camera.lookAt(scene.position);
+            });
+        }
+        
+        // Particle Background
+        function createParticles() {
+            const particleContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+                particleContainer.appendChild(particle);
+            }
+        }
+        
+        // GSAP Animations
+        function initAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Hero section animation
+            gsap.from('.hero-content h1', {
+                duration: 1.5,
+                y: 100,
+                opacity: 0,
+                ease: 'power3.out'
+            });
+            
+            gsap.from('.hero-content p', {
+                duration: 1.5,
+                y: 50,
+                opacity: 0,
+                delay: 0.3,
+                ease: 'power3.out'
+            });
+            
+            gsap.from('.hero-content .flex', {
+                duration: 1.5,
+                y: 50,
+                opacity: 0,
+                delay: 0.6,
+                ease: 'power3.out'
+            });
+            
+            // Section animations
+            gsap.utils.toArray('section').forEach((section, i) => {
+                if (i === 0) return; // Skip hero section
+                
+                gsap.from(section.children, {
+                    duration: 1,
+                    y: 100,
+                    opacity: 0,
+                    stagger: 0.1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 80%',
+                        end: 'bottom 20%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            });
+            
+            // Skill bars animation
+            gsap.utils.toArray('.skill-bar').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                
+                gsap.to(bar, {
+                    width: width,
+                    duration: 1.5,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: bar,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            });
+            
+            // Project cards animation
+            gsap.utils.toArray('.project-card').forEach((card, i) => {
+                gsap.from(card, {
+                    duration: 0.8,
+                    y: 100,
+                    opacity: 0,
+                    delay: i * 0.1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            });
+        }
+        
+        // Smooth scroll navigation
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Scroll indicator
+        function initScrollIndicator() {
+            const dots = document.querySelectorAll('.scroll-dot');
+            const sections = document.querySelectorAll('section');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= sectionTop - 300) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                dots.forEach(dot => {
+                    dot.classList.remove('active');
+                    if (dot.getAttribute('data-section') === current) {
+                        dot.classList.add('active');
+                    }
+                });
+            });
+            
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const section = document.getElementById(dot.getAttribute('data-section'));
+                    if (section) {
+                        section.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+        
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+            createParticles();
+            initAnimations();
+            initSmoothScroll();
+            initScrollIndicator();
+        });
+        
+        // TODO: Add form validation and submission handling for contact forms
+        // TODO: Implement lazy loading for images to improve performance
+        // TODO: Add service worker for offline functionality
+        // TODO: Integrate analytics tracking for user interactions
+        
+    })();
+    </script>
+</body>
+</html>
