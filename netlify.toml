@@ -1,5 +1,6 @@
 [build]
   command = "CI= npm run build"
+  publish = "dist"  # ✅ Add this line to point to Vite's output folder
 
 [[redirects]]
   from = "/*"
