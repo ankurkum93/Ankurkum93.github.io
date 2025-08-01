@@ -1,0 +1,162 @@
+M
+My Workspace
+Ankurkum93.github.io
+Menu
+
+Search
+Command+
+K
+
+New
+
+Upgrade
+
+
+a
+Dashboard
+Ankurkum93.github.io
+Events
+Settings
+Monitor
+Logs
+Metrics
+Manage
+Environment
+Shell
+Scaling
+Previews
+Disks
+Jobs
+
+Changelog
+Invite a friend
+
+Contact support
+Render Status
+Web Service
+Ankurkum93.github.io
+Node
+Free
+Upgrade your instance
+
+Connect
+
+Manual Deploy
+Service ID:
+srv-d258tfggjchc73ckek6g
+
+ankurkum93 / Ankurkum93.github.io
+dev
+https://ankurkum93-github-io.onrender.com
+
+Your free instance will spin down with inactivity, which can delay requests by 50 seconds or more.
+Upgrade now
+August 1, 2025 at 6:40 PM
+failed
+4f0a668
+Adding all the files
+
+Rollback
+Ankurkum93.github.io
+
+Logs
+
+All logs
+Search
+Search
+
+Live tail
+GMT+2
+Menu
+
+==> Cloning from https://github.com/ankurkum93/Ankurkum93.github.io
+==> Checking out commit 4f0a66815ed3c96d99f58ee1df4d22ff70be452f in branch dev
+==> Using Node.js version 18.20.4 via /opt/render/project/src/.nvmrc
+==> Node.js version 18.20.4 has reached end-of-life.
+==> Upgrade to a maintained version to receive important security updates.
+==> Information on maintained Node.js versions: https://nodejs.org/en/about/previous-releases
+==> Docs on specifying a Node.js version: https://render.com/docs/node-version
+==> Running build command 'cd client && npm install && npm run build && cd .. && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist'...
+added 508 packages, and audited 509 packages in 10s
+68 packages are looking for funding
+  run `npm fund` for details
+5 moderate severity vulnerabilities
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+Run `npm audit` for details.
+> ankur-portfolio@1.0.0 build
+> npm install && vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+up to date, audited 509 packages in 2s
+68 packages are looking for funding
+  run `npm fund` for details
+5 moderate severity vulnerabilities
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+Run `npm audit` for details.
+vite v5.4.19 building for production...
+transforming...
+✓ 1674 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/public/index.html                   0.63 kB │ gzip:   0.38 kB
+../dist/public/assets/index-BJqxvwOc.css   66.74 kB │ gzip:  11.73 kB
+../dist/public/assets/index-DqaIUMcH.js   762.46 kB │ gzip: 212.39 kB
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.84s
+  dist/index.js  5.2kb
+⚡ Done in 3ms
+  dist/index.js  5.2kb
+⚡ Done in 4ms
+==> Uploading build...
+==> Uploaded in 6.1s. Compression took 3.3s
+==> Build successful 🎉
+==> Deploying...
+==> Running 'npm run start'
+> ankur-portfolio@1.0.0 start
+> NODE_ENV=production node dist/index.js
+node:internal/errors:496
+    ErrorCaptureStackTrace(err);
+    ^
+TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:405:5)
+    at validateString (node:internal/validators:162:11)
+    at Object.resolve (node:path:1097:7)
+    at file:///opt/render/project/src/dist/index.js:49:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+    at async loadESM (node:internal/process/esm_loader:34:7)
+    at async handleMainPromise (node:internal/modules/run_main:106:12) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+Node.js v18.20.4
+==> Exited with status 1
+==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+==> Running 'npm run start'
+> ankur-portfolio@1.0.0 start
+> NODE_ENV=production node dist/index.js
+node:internal/errors:496
+    ErrorCaptureStackTrace(err);
+    ^
+TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:405:5)
+    at validateString (node:internal/validators:162:11)
+    at Object.resolve (node:path:1097:7)
+    at file:///opt/render/project/src/dist/index.js:49:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+    at async loadESM (node:internal/process/esm_loader:34:7)
+    at async handleMainPromise (node:internal/modules/run_main:106:12) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+Node.js v18.20.4
+Need better ways to work with logs? Try theRender CLIor set up a log stream integration 
+
+0 services selected:
+
+Move
+
+Generate Blueprint
+
