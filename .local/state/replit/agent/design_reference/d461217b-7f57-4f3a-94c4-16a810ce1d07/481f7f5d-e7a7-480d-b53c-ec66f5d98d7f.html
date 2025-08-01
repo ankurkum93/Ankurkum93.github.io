@@ -1,0 +1,690 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankur Kumar | Data Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'dark-primary': '#0F0F23',
+                        'dark-secondary': '#1A1A2E',
+                        'accent-purple': '#8B5CF6',
+                        'accent-cyan': '#06B6D4',
+                        'accent-emerald': '#10B981',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite alternate',
+                        'gradient-shift': 'gradient-shift 3s ease infinite',
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4, #10B981);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3), 0 0 60px rgba(6, 182, 212, 0.2);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
+            100% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.6); }
+        }
+        
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .skill-bar {
+            position: relative;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #8B5CF6, #06B6D4);
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .skill-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .project-card {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .project-card:hover {
+            transform: rotateY(5deg) rotateX(5deg) translateZ(50px);
+        }
+    </style>
+</head>
+<body class="bg-dark-primary text-white">
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+    
+    <!-- Three.js Canvas -->
+    <canvas id="three-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-morphism">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold gradient-text">Ankur Kumar</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="hover:text-accent-cyan transition-colors">Home</a>
+                    <a href="#projects" class="hover:text-accent-cyan transition-colors">Projects</a>
+                    <a href="#skills" class="hover:text-accent-cyan transition-colors">Skills</a>
+                    <a href="#contact" class="hover:text-accent-cyan transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="container mx-auto px-6 text-center z-10 relative">
+            <div class="space-y-8">
+                <h1 class="text-6xl md:text-8xl font-black leading-tight">
+                    <span class="block">Hi, I'm</span>
+                    <span class="block gradient-text animate-pulse-glow">Ankur</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto font-light">
+                    I love to build and deploy <span class="gradient-text font-semibold">Data Models</span>
+                </p>
+                <p class="text-lg text-gray-400 max-w-4xl mx-auto leading-relaxed">
+                    Data Engineer with more than 3 years of experience in the field of Data. Love to create Data Pipelines using NiFi, 
+                    analysing the data with various flavours of SQL and then visualizing it in Power BI & Tableau.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-12">
+                    <a href="#contact" class="glass-morphism px-8 py-4 rounded-full text-lg font-semibold hover:glow-effect transition-all transform hover:scale-105">
+                        Work With Me
+                    </a>
+                    <a href="#projects" class="border border-accent-cyan px-8 py-4 rounded-full text-lg font-semibold hover:bg-accent-cyan hover:text-dark-primary transition-all transform hover:scale-105">
+                        See My Past Work
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hero Image with 3D effect -->
+        <div class="absolute right-10 top-1/2 transform -translate-y-1/2 hidden lg:block">
+            <!-- Modern tech workspace with holographic displays and futuristic interface -->
+            <img src="https://pixabay.com/get/gb619db7fa191fb9c7e74f7e2b1c7f3999838d7a630f463e6c8311cedf0fa147a9625eb19398942946b33b284eadc6d3184de1754e315e9c43490c4c8789d234a_1280.jpg" 
+                 alt="Modern tech workspace" 
+                 class="w-96 h-64 object-cover rounded-2xl glass-morphism animate-float shadow-2xl" />
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-4">
+                <span class="gradient-text">Projects I've Built</span>
+            </h2>
+            <p class="text-xl text-gray-400 text-center mb-16 max-w-3xl mx-auto">
+                Many projects are in incubation mode and many have come to fruition. 
+                Below mentioned are some of the many projects.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Covid-19 Report Project -->
+                <div class="project-card glass-morphism rounded-2xl p-6 group">
+                    <!-- Data visualization showing COVID-19 statistics with charts and graphs -->
+                    <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" 
+                         alt="COVID-19 data visualization" 
+                         class="w-full h-48 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform" />
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-accent-purple/20 text-accent-purple rounded-full text-sm">Apache NiFi</span>
+                            <span class="px-3 py-1 bg-accent-cyan/20 text-accent-cyan rounded-full text-sm">SQL</span>
+                            <span class="px-3 py-1 bg-accent-emerald/20 text-accent-emerald rounded-full text-sm">Power BI</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Covid-19 Report</h3>
+                        <p class="text-gray-400">I have used NiFi to maintain the data flow, SQL for transformation and Power BI for this visualisation</p>
+                        <a href="https://app.powerbi.com/view?r=eyJrIjoiODQxZjNmZmItNTA2OS00NmY3LWJhODQtMjM5N2QyN2RiYzg4IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection1c349ce01cc14d856c35" 
+                           target="_blank" 
+                           class="inline-block px-6 py-2 bg-gradient-to-r from-accent-purple to-accent-cyan rounded-full text-white font-semibold hover:shadow-lg transition-all">
+                            View Project
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Maven Toys Challenge -->
+                <div class="project-card glass-morphism rounded-2xl p-6 group">
+                    <!-- Colorful business analytics dashboard with charts showing toy sales data -->
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" 
+                         alt="Business analytics dashboard" 
+                         class="w-full h-48 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform" />
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-accent-emerald/20 text-accent-emerald rounded-full text-sm">Excel</span>
+                            <span class="px-3 py-1 bg-accent-cyan/20 text-accent-cyan rounded-full text-sm">SQL</span>
+                            <span class="px-3 py-1 bg-accent-purple/20 text-accent-purple rounded-full text-sm">Power BI</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Maven Toys Challenge</h3>
+                        <p class="text-gray-400">This was an online dataset of Toy sales in Mexico from the year 1994-2018. I cleaned the data in Excel and transformation is done partly in SQL and Partly in Power BI</p>
+                        <a href="https://app.powerbi.com/view?r=eyJrIjoiMmZiN2I5MzctYTkyNi00ZGVlLTkxMzUtOGVjM2Q5NjFhYzI5IiwidCI6IjZjZDM2ZjgzLTFhMDItNDQyZC05NzJmLTI2NzBjYjVlOWIxYSIsImMiOjh9&pageName=ReportSection4d539820a08983994be8" 
+                           target="_blank" 
+                           class="inline-block px-6 py-2 bg-gradient-to-r from-accent-purple to-accent-cyan rounded-full text-white font-semibold hover:shadow-lg transition-all">
+                            View Project
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Danny's Diner -->
+                <div class="project-card glass-morphism rounded-2xl p-6 group">
+                    <!-- Abstract database visualization with interconnected nodes and data flows -->
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" 
+                         alt="Database schema visualization" 
+                         class="w-full h-48 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform" />
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-accent-cyan/20 text-accent-cyan rounded-full text-sm">SQL</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Danny's Diner</h3>
+                        <p class="text-gray-400">Danny's Diner is the project in which there are multiple tables in STAR Schema. Queried the database using different joins and complex queries</p>
+                        <a href="https://github.com/ankurkum93/CaseStudy-SQL" 
+                           target="_blank" 
+                           class="inline-block px-6 py-2 bg-gradient-to-r from-accent-purple to-accent-cyan rounded-full text-white font-semibold hover:shadow-lg transition-all">
+                            View Project
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Metro App -->
+                <div class="project-card glass-morphism rounded-2xl p-6 group">
+                    <!-- Modern mobile app interface displaying metro transit system -->
+                    <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" 
+                         alt="Mobile metro application interface" 
+                         class="w-full h-48 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform" />
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-accent-purple/20 text-accent-purple rounded-full text-sm">Cassandra</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Mobile Metro App</h3>
+                        <p class="text-gray-400">This is a mobile metro app that has been developed from scratch including data generation, cleaning, ingestion in Cassandra and then querying it</p>
+                        <a href="https://github.com/ankurkum93/ADM" 
+                           target="_blank" 
+                           class="inline-block px-6 py-2 bg-gradient-to-r from-accent-purple to-accent-cyan rounded-full text-white font-semibold hover:shadow-lg transition-all">
+                            View Project
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bike MS Project -->
+                <div class="project-card glass-morphism rounded-2xl p-6 group">
+                    <!-- Data processing pipeline visualization with distributed computing elements -->
+                    <img src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" 
+                         alt="Big data processing visualization" 
+                         class="w-full h-48 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform" />
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-accent-emerald/20 text-accent-emerald rounded-full text-sm">Spark</span>
+                            <span class="px-3 py-1 bg-accent-cyan/20 text-accent-cyan rounded-full text-sm">Hive</span>
+                            <span class="px-3 py-1 bg-accent-purple/20 text-accent-purple rounded-full text-sm">PostgreSQL</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Bike MS Project</h3>
+                        <p class="text-gray-400">This app features data cleaning, ingestion in distributed system and querying it with Spark, Hive and Postgre. Tableau is used for Data Viz</p>
+                        <a href="https://github.com/ankurkum93/Data-Warehousing" 
+                           target="_blank" 
+                           class="inline-block px-6 py-2 bg-gradient-to-r from-accent-purple to-accent-cyan rounded-full text-white font-semibold hover:shadow-lg transition-all">
+                            View Project
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Movie Recommender System -->
+                <div class="project-card glass-morphism rounded-2xl p-6 group">
+                    <!-- AI recommendation system interface with movie posters and algorithms -->
+                    <img src="https://images.unsplash.com/photo-1489844097929-c8d5b91c456e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" 
+                         alt="Movie recommendation AI system" 
+                         class="w-full h-48 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform" />
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-accent-emerald/20 text-accent-emerald rounded-full text-sm">Python</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Movie Recommender System</h3>
+                        <p class="text-gray-400">I have used content based and collaborative filtering to make the movie recommendation engine</p>
+                        <a href="https://github.com/ankurkum93/Data-Mining" 
+                           target="_blank" 
+                           class="inline-block px-6 py-2 bg-gradient-to-r from-accent-purple to-accent-cyan rounded-full text-white font-semibold hover:shadow-lg transition-all">
+                            View Project
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-4">
+                <span class="gradient-text">Skills & Technologies</span>
+            </h2>
+            <p class="text-xl text-gray-400 text-center mb-16 max-w-4xl mx-auto">
+                Have acquired extensive experience in working with the below mentioned Technologies 
+                through various advanced projects for academics as well as Professional work.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- SQL -->
+                <div class="glass-morphism rounded-2xl p-8 text-center group hover:glow-effect transition-all">
+                    <!-- Abstract geometric representation of SQL database structures -->
+                    <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" 
+                         alt="SQL database visualization" 
+                         class="w-24 h-24 mx-auto mb-6 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <h3 class="text-2xl font-bold mb-4">SQL</h3>
+                    <div class="skill-bar mb-4">
+                        <div class="skill-progress" style="width: 95%"></div>
+                    </div>
+                    <span class="text-accent-cyan font-semibold">Expert Level</span>
+                </div>
+
+                <!-- Python -->
+                <div class="glass-morphism rounded-2xl p-8 text-center group hover:glow-effect transition-all">
+                    <!-- Python code visualization with data science elements -->
+                    <img src="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" 
+                         alt="Python programming visualization" 
+                         class="w-24 h-24 mx-auto mb-6 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <h3 class="text-2xl font-bold mb-4">Python</h3>
+                    <div class="skill-bar mb-4">
+                        <div class="skill-progress" style="width: 90%"></div>
+                    </div>
+                    <span class="text-accent-purple font-semibold">Advanced Level</span>
+                </div>
+
+                <!-- Power BI -->
+                <div class="glass-morphism rounded-2xl p-8 text-center group hover:glow-effect transition-all">
+                    <!-- Business intelligence dashboard with colorful charts and KPIs -->
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" 
+                         alt="Power BI dashboard visualization" 
+                         class="w-24 h-24 mx-auto mb-6 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <h3 class="text-2xl font-bold mb-4">Power BI</h3>
+                    <div class="skill-bar mb-4">
+                        <div class="skill-progress" style="width: 92%"></div>
+                    </div>
+                    <span class="text-accent-emerald font-semibold">Expert Level</span>
+                </div>
+
+                <!-- Tableau -->
+                <div class="glass-morphism rounded-2xl p-8 text-center group hover:glow-effect transition-all">
+                    <!-- Tableau-style data visualization with interactive charts -->
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" 
+                         alt="Tableau data visualization" 
+                         class="w-24 h-24 mx-auto mb-6 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <h3 class="text-2xl font-bold mb-4">Tableau</h3>
+                    <div class="skill-bar mb-4">
+                        <div class="skill-progress" style="width: 88%"></div>
+                    </div>
+                    <span class="text-accent-cyan font-semibold">Advanced Level</span>
+                </div>
+
+                <!-- Apache NiFi -->
+                <div class="glass-morphism rounded-2xl p-8 text-center group hover:glow-effect transition-all">
+                    <!-- Data flow pipeline visualization with nodes and connections -->
+                    <img src="https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" 
+                         alt="Apache NiFi data pipeline" 
+                         class="w-24 h-24 mx-auto mb-6 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <h3 class="text-2xl font-bold mb-4">Apache NiFi</h3>
+                    <div class="skill-bar mb-4">
+                        <div class="skill-progress" style="width: 85%"></div>
+                    </div>
+                    <span class="text-accent-purple font-semibold">Advanced Level</span>
+                </div>
+
+                <!-- Cassandra -->
+                <div class="glass-morphism rounded-2xl p-8 text-center group hover:glow-effect transition-all">
+                    <!-- Distributed database architecture with nodes and clusters -->
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" 
+                         alt="Cassandra distributed database" 
+                         class="w-24 h-24 mx-auto mb-6 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <h3 class="text-2xl font-bold mb-4">Cassandra</h3>
+                    <div class="skill-bar mb-4">
+                        <div class="skill-progress" style="width: 80%"></div>
+                    </div>
+                    <span class="text-accent-emerald font-semibold">Intermediate Level</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-4">
+                <span class="gradient-text">Work with Me</span>
+            </h2>
+            <p class="text-xl text-gray-400 text-center mb-16 max-w-3xl mx-auto">
+                Let's meet for a virtual coffee and brainstorm new ideas together. 
+                Kindly mention your details so that I can reach out quickly
+            </p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <!-- Contact Info -->
+                <div class="space-y-8">
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h3 class="text-2xl font-bold mb-6 gradient-text">Get In Touch</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-accent-purple to-accent-cyan rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400">Email</p>
+                                    <p class="text-lg font-semibold">ankurkum93@gmail.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-accent-cyan to-accent-emerald rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400">Phone</p>
+                                    <p class="text-lg font-semibold">+39 3474609701</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-accent-emerald to-accent-purple rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400">Location</p>
+                                    <p class="text-lg font-semibold">Genoa, Liguria, Italy</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Form -->
+                <div class="glass-morphism rounded-2xl p-8">
+                    <form class="space-y-6" data-mock="true">
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="name">Name</label>
+                            <input type="text" id="name" name="name" class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl focus:outline-none focus:border-accent-cyan transition-colors" data-mock="true">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="email">Email</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl focus:outline-none focus:border-accent-cyan transition-colors" data-mock="true">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl focus:outline-none focus:border-accent-cyan transition-colors resize-none" data-mock="true"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-accent-purple to-accent-cyan rounded-xl font-semibold text-lg hover:shadow-lg transition-all transform hover:scale-105" data-implementation="Should validate form and send email">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-white/10">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-400">&copy; 2024 Ankur Kumar. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize GSAP and ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Three.js Setup
+        (function() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Create floating geometric shapes
+            const geometries = [
+                new THREE.BoxGeometry(1, 1, 1),
+                new THREE.OctahedronGeometry(0.8),
+                new THREE.TetrahedronGeometry(0.9),
+                new THREE.IcosahedronGeometry(0.7)
+            ];
+            
+            const materials = [
+                new THREE.MeshBasicMaterial({ color: 0x8B5CF6, wireframe: true, transparent: true, opacity: 0.6 }),
+                new THREE.MeshBasicMaterial({ color: 0x06B6D4, wireframe: true, transparent: true, opacity: 0.6 }),
+                new THREE.MeshBasicMaterial({ color: 0x10B981, wireframe: true, transparent: true, opacity: 0.6 })
+            ];
+            
+            const meshes = [];
+            
+            // Create multiple floating objects
+            for (let i = 0; i < 15; i++) {
+                const geometry = geometries[Math.floor(Math.random() * geometries.length)];
+                const material = materials[Math.floor(Math.random() * materials.length)];
+                const mesh = new THREE.Mesh(geometry, material);
+                
+                mesh.position.x = (Math.random() - 0.5) * 20;
+                mesh.position.y = (Math.random() - 0.5) * 20;
+                mesh.position.z = (Math.random() - 0.5) * 20;
+                
+                mesh.rotation.x = Math.random() * Math.PI;
+                mesh.rotation.y = Math.random() * Math.PI;
+                
+                meshes.push(mesh);
+                scene.add(mesh);
+            }
+            
+            camera.position.z = 10;
+            
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Rotate meshes
+                meshes.forEach((mesh, index) => {
+                    mesh.rotation.x += 0.005 + index * 0.001;
+                    mesh.rotation.y += 0.005 + index * 0.001;
+                    
+                    // Add floating motion
+                    mesh.position.y += Math.sin(Date.now() * 0.001 + index) * 0.002;
+                });
+                
+                // Camera follows mouse
+                camera.position.x += (mouseX * 2 - camera.position.x) * 0.05;
+                camera.position.y += (mouseY * 2 - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        })();
+
+        // Particle System
+        (function() {
+            const particleContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                
+                particleContainer.appendChild(particle);
+            }
+        })();
+
+        // GSAP Animations
+        (function() {
+            // Hero section animations
+            gsap.timeline()
+                .from(".hero h1", { duration: 1.5, y: 100, opacity: 0, ease: "power4.out" })
+                .from(".hero p", { duration: 1, y: 50, opacity: 0, ease: "power3.out" }, "-=0.8")
+                .from(".hero .flex", { duration: 1, y: 30, opacity: 0, ease: "power3.out" }, "-=0.5");
+
+            // Project cards animation
+            gsap.fromTo(".project-card", 
+                { y: 100, opacity: 0, rotationY: -15 },
+                { 
+                    y: 0, 
+                    opacity: 1, 
+                    rotationY: 0,
+                    duration: 1,
+                    ease: "power3.out",
+                    stagger: 0.2,
+                    scrollTrigger: {
+                        trigger: "#projects",
+                        start: "top 80%"
+                    }
+                }
+            );
+
+            // Skill bars animation
+            ScrollTrigger.batch(".skill-progress", {
+                onEnter: elements => {
+                    elements.forEach(el => {
+                        const width = el.style.width;
+                        el.style.width = '0%';
+                        gsap.to(el, {
+                            width: width,
+                            duration: 2,
+                            ease: "power3.out"
+                        });
+                    });
+                },
+                start: "top 80%"
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        gsap.to(window, {
+                            duration: 1.5,
+                            scrollTo: target,
+                            ease: "power3.inOut"
+                        });
+                    }
+                });
+            });
+        })();
+
+        // Form submission (mock implementation)
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // TODO: Implement actual form submission logic
+            alert('Thank you for your message! This is a demo form.');
+        });
+    </script>
+</body>
+</html>
