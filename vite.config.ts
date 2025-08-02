@@ -28,4 +28,6 @@ export default defineConfig({
     noExternal: ['react', 'react-dom'],
   },
   root: path.resolve(__dirname, "client"),
+  clearScreen: false,
+  logLevel: 'info',
 });

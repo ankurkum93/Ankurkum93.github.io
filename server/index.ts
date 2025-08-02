@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 // Register your API routes here
 // app.use("/api", yourRoutes)
 
-const distPath = path.join(process.cwd(), "dist", "public");
+const distPath = path.join(process.cwd(), "dist", "client");
 app.use(express.static(distPath));
 
 // catch-all for client-side routing
