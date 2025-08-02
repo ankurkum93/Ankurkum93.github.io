@@ -1,6 +1,10 @@
 import { execSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 console.log('🚀 Starting custom build process...');
 
@@ -15,6 +19,7 @@ execSync('npm install react react-dom @types/react @types/react-dom', { stdio: '
 // Step 3: Build with Vite
 console.log('🔨 Building with Vite...');
 try {
+  // Try building from client directory first
   execSync('npx vite build', { 
     stdio: 'inherit',
     cwd: path.resolve(__dirname, 'client')
