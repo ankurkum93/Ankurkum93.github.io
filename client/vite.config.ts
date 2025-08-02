@@ -14,8 +14,11 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, "..", "dist", "client"),
     emptyOutDir: true,
+    rollupOptions: {
+      external: [],
+    },
   },
-  optimizeDeps: {
-    include: ['react', 'react-dom'],
+  define: {
+    'process.env.NODE_ENV': '"production"',
   },
 }); 
