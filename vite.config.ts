@@ -27,4 +27,5 @@ export default defineConfig({
   ssr: {
     noExternal: ['react', 'react-dom'],
   },
+  root: path.resolve(__dirname, "client"),
 });
