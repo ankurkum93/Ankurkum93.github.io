@@ -14,7 +14,22 @@ execSync('npm install', { stdio: 'inherit' });
 
 // Step 2: Ensure React dependencies are available
 console.log('⚛️ Ensuring React dependencies...');
-execSync('npm install react react-dom @types/react @types/react-dom', { stdio: 'inherit' });
+try {
+  execSync('npm install react react-dom @types/react @types/react-dom --force', { stdio: 'inherit' });
+} catch (error) {
+  console.log('⚠️ React dependencies already installed, continuing...');
+}
+
+// Verify React is available
+console.log('🔍 Verifying React installation...');
+try {
+  execSync('node -e "console.log(\'React version:\', require(\'react/package.json\').version)"', { stdio: 'inherit' });
+  execSync('node -e "console.log(\'React-DOM version:\', require(\'react-dom/package.json\').version)"', { stdio: 'inherit' });
+} catch (error) {
+  console.error('❌ React verification failed, trying to reinstall...');
+  execSync('rm -rf node_modules package-lock.json', { stdio: 'inherit' });
+  execSync('npm install', { stdio: 'inherit' });
+}
 
 // Step 3: Try alternative build approaches
 console.log('🔨 Trying alternative build approaches...');
@@ -33,8 +48,8 @@ try {
   execSync('cp client/index.html dist/client/', { stdio: 'inherit' });
   execSync('cp -r client/src/*.css dist/client/', { stdio: 'inherit' });
   
-  // Use esbuild to bundle the main entry point with React included
-  execSync('npx esbuild client/src/main.tsx --bundle --format=esm --outdir=dist/client --platform=browser --target=es2020 --minify', { stdio: 'inherit' });
+  // Use esbuild with proper Node.js module resolution
+  execSync('npx esbuild client/src/main.tsx --bundle --format=esm --outdir=dist/client --platform=browser --target=es2020 --minify --packages=external --main-fields=browser,module,main', { stdio: 'inherit' });
   
   // Rename the output to main.js
   execSync('mv dist/client/main.js dist/client/main.js.tmp', { stdio: 'inherit' });
