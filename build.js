@@ -19,23 +19,44 @@ execSync('npm install react react-dom @types/react @types/react-dom', { stdio: '
 // Step 3: Try alternative build approaches
 console.log('🔨 Trying alternative build approaches...');
 
-// Try using esbuild directly for the React app
+// Try using Vite with a simple configuration
 try {
-  console.log('🔨 Trying esbuild approach...');
-  execSync('npx esbuild client/src/main.tsx --bundle --format=esm --outdir=dist/client --platform=browser --external:react --external:react-dom', { stdio: 'inherit' });
+  console.log('🔨 Trying Vite approach...');
   
-  // Copy HTML and CSS files
-  execSync('cp client/index.html dist/client/', { stdio: 'inherit' });
-  execSync('cp -r client/src/*.css dist/client/', { stdio: 'inherit' });
+  // Create a simple Vite config for this build
+  const simpleViteConfig = `
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    },
+  },
+  build: {
+    outDir: '../dist/client',
+    emptyOutDir: true,
+  },
+  root: '.',
+})
+`;
   
-  // Update the HTML to reference the esbuild output
-  const htmlPath = path.join(__dirname, 'dist', 'client', 'index.html');
-  let htmlContent = fs.readFileSync(htmlPath, 'utf8');
-  htmlContent = htmlContent.replace('src="/src/main.tsx"', 'src="main.js"');
-  htmlContent = htmlContent.replace('href="/src/index.css"', 'href="index.css"');
-  fs.writeFileSync(htmlPath, htmlContent);
+  const viteConfigPath = path.join(__dirname, 'client', 'vite.simple.config.js');
+  fs.writeFileSync(viteConfigPath, simpleViteConfig);
   
-  console.log('✅ esbuild approach successful!');
+  // Build with the simple config
+  execSync('npx vite build --config vite.simple.config.js', { 
+    stdio: 'inherit',
+    cwd: path.resolve(__dirname, 'client')
+  });
+  
+  // Clean up the temporary config
+  fs.unlinkSync(viteConfigPath);
+  
+  console.log('✅ Vite approach successful!');
 } catch (error) {
   console.error('❌ esbuild approach failed, trying Vite...');
   
