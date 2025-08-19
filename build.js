@@ -19,44 +19,35 @@ execSync('npm install react react-dom @types/react @types/react-dom', { stdio: '
 // Step 3: Try alternative build approaches
 console.log('🔨 Trying alternative build approaches...');
 
-// Try using Vite with a simple configuration
+// Try manual build approach
 try {
-  console.log('🔨 Trying Vite approach...');
+  console.log('🔨 Trying manual build approach...');
   
-  // Create a simple Vite config for this build
-  const simpleViteConfig = `
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
-
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "src"),
-    },
-  },
-  build: {
-    outDir: '../dist/client',
-    emptyOutDir: true,
-  },
-  root: '.',
-})
-`;
+  // Create dist/client directory
+  const distClientPath = path.join(__dirname, 'dist', 'client');
+  if (!fs.existsSync(distClientPath)) {
+    fs.mkdirSync(distClientPath, { recursive: true });
+  }
   
-  const viteConfigPath = path.join(__dirname, 'client', 'vite.simple.config.js');
-  fs.writeFileSync(viteConfigPath, simpleViteConfig);
+  // Copy static files
+  execSync('cp client/index.html dist/client/', { stdio: 'inherit' });
+  execSync('cp -r client/src/*.css dist/client/', { stdio: 'inherit' });
   
-  // Build with the simple config
-  execSync('npx vite build --config vite.simple.config.js', { 
-    stdio: 'inherit',
-    cwd: path.resolve(__dirname, 'client')
-  });
+  // Use esbuild to bundle the main entry point with React included
+  execSync('npx esbuild client/src/main.tsx --bundle --format=esm --outdir=dist/client --platform=browser --target=es2020 --minify', { stdio: 'inherit' });
   
-  // Clean up the temporary config
-  fs.unlinkSync(viteConfigPath);
+  // Rename the output to main.js
+  execSync('mv dist/client/main.js dist/client/main.js.tmp', { stdio: 'inherit' });
+  execSync('mv dist/client/main.js.tmp dist/client/main.js', { stdio: 'inherit' });
   
-  console.log('✅ Vite approach successful!');
+  // Update HTML to reference the bundled JS
+  const htmlPath = path.join(__dirname, 'dist', 'client', 'index.html');
+  let htmlContent = fs.readFileSync(htmlPath, 'utf8');
+  htmlContent = htmlContent.replace('src="/src/main.tsx"', 'src="main.js"');
+  htmlContent = htmlContent.replace('href="/src/index.css"', 'href="index.css"');
+  fs.writeFileSync(htmlPath, htmlContent);
+  
+  console.log('✅ Manual build approach successful!');
 } catch (error) {
   console.error('❌ esbuild approach failed, trying Vite...');
   
