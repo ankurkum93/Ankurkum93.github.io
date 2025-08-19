@@ -1,10 +1,8 @@
 services:
   - type: web
-    name: portfolio-backend
+    name: your-app-name
     env: node
-    plan: free
-    nodeVersion: 22.16.0
-    buildCommand: npm install && npm run render:build
+    buildCommand: npm run render:build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
