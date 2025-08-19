@@ -55,11 +55,16 @@ try {
   execSync('mv dist/client/main.js dist/client/main.js.tmp', { stdio: 'inherit' });
   execSync('mv dist/client/main.js.tmp dist/client/main.js', { stdio: 'inherit' });
   
-  // Update HTML to reference the bundled JS
+  // Update HTML to reference the bundled JS and CSS
   const htmlPath = path.join(__dirname, 'dist', 'client', 'index.html');
   let htmlContent = fs.readFileSync(htmlPath, 'utf8');
   htmlContent = htmlContent.replace('src="/src/main.tsx"', 'src="main.js"');
-  htmlContent = htmlContent.replace('href="/src/index.css"', 'href="index.css"');
+  
+  // Add CSS link if it doesn't exist
+  if (!htmlContent.includes('<link')) {
+    htmlContent = htmlContent.replace('<head>', '<head>\n    <link rel="stylesheet" href="main.css">');
+  }
+  
   fs.writeFileSync(htmlPath, htmlContent);
   
   console.log('✅ Manual build approach successful!');
