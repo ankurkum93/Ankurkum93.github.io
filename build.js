@@ -16,21 +16,43 @@ execSync('npm install', { stdio: 'inherit' });
 console.log('⚛️ Ensuring React dependencies...');
 execSync('npm install react react-dom @types/react @types/react-dom', { stdio: 'inherit' });
 
-// Step 3: Build with Vite
-console.log('🔨 Building with Vite...');
+// Step 3: Try alternative build approaches
+console.log('🔨 Trying alternative build approaches...');
+
+// Try using esbuild directly for the React app
 try {
-  // Try building from client directory first
-  execSync('npx vite build', { 
-    stdio: 'inherit',
-    cwd: path.resolve(__dirname, 'client')
-  });
-} catch (error) {
-  console.error('❌ Vite build failed, trying alternative approach...');
+  console.log('🔨 Trying esbuild approach...');
+  execSync('npx esbuild client/src/main.tsx --bundle --format=esm --outdir=dist/client --platform=browser --external:react --external:react-dom', { stdio: 'inherit' });
   
-  // Alternative: Try building from root with explicit config
-  execSync('npx vite build --config vite.config.ts', { 
-    stdio: 'inherit'
-  });
+  // Copy HTML and CSS files
+  execSync('cp client/index.html dist/client/', { stdio: 'inherit' });
+  execSync('cp -r client/src/*.css dist/client/', { stdio: 'inherit' });
+  
+  // Update the HTML to reference the esbuild output
+  const htmlPath = path.join(__dirname, 'dist', 'client', 'index.html');
+  let htmlContent = fs.readFileSync(htmlPath, 'utf8');
+  htmlContent = htmlContent.replace('src="/src/main.tsx"', 'src="main.js"');
+  htmlContent = htmlContent.replace('href="/src/index.css"', 'href="index.css"');
+  fs.writeFileSync(htmlPath, htmlContent);
+  
+  console.log('✅ esbuild approach successful!');
+} catch (error) {
+  console.error('❌ esbuild approach failed, trying Vite...');
+  
+  try {
+    // Try building from root with explicit config
+    execSync('npx vite build --config vite.config.ts', { 
+      stdio: 'inherit'
+    });
+  } catch (viteError) {
+    console.error('❌ Vite build also failed, trying client directory...');
+    
+    // Alternative: Try building from client directory
+    execSync('npx vite build', { 
+      stdio: 'inherit',
+      cwd: path.resolve(__dirname, 'client')
+    });
+  }
 }
 
 // Step 4: Build server
