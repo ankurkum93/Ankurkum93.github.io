@@ -2,12 +2,29 @@ import { MapPin, Mail, Phone, Linkedin, Github, Download } from "lucide-react";
 
 export default function Contact() {
   const downloadResume = () => {
-    const link = document.createElement('a');
-    link.href = '/api/resume';
-    link.download = 'Ankur_Kumar_Resume.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      // Try direct download first
+      const link = document.createElement('a');
+      link.href = '/Resume_Senior_Data_Engineer_1753900296996.pdf';
+      link.download = 'Ankur_Kumar_Resume.pdf';
+      link.target = '_blank';
+      
+      // Add click event listener to handle errors
+      link.onclick = (e) => {
+        // If download fails, open in new tab as fallback
+        setTimeout(() => {
+          window.open('/Resume_Senior_Data_Engineer_1753900296996.pdf', '_blank');
+        }, 100);
+      };
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      // Fallback: open in new tab
+      console.log('Download failed, opening in new tab:', error);
+      window.open('/Resume_Senior_Data_Engineer_1753900296996.pdf', '_blank');
+    }
   };
 
   return (

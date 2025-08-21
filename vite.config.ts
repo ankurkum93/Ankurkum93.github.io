@@ -11,18 +11,37 @@ export default defineConfig({
       "@shared": path.resolve(__dirname, "shared"),
       "@assets": path.resolve(__dirname, "attached_assets"),
     },
+    dedupe: ['react', 'react-dom'],
   },
   build: {
     outDir: path.resolve(__dirname, "dist/client"),
     emptyOutDir: true,
     rollupOptions: {
+      external: [],
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+        },
+      },
     },
+    commonjsOptions: {
+      include: [/node_modules/],
+    },
+  },
+  css: {
+    modules: false,
+    postcss: './postcss.config.js',
   },
   define: {
     'process.env.NODE_ENV': '"production"',
+    'global': 'globalThis',
   },
   optimizeDeps: {
     include: ['react', 'react-dom'],
+    force: true,
+    esbuildOptions: {
+      target: 'es2020',
+    },
   },
   ssr: {
     noExternal: ['react', 'react-dom'],

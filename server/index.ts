@@ -6,6 +6,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Serve static files from public directory (for resume, etc.)
+app.use(express.static(path.join(process.cwd(), "public")));
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -47,7 +50,7 @@ app.get("*", (_req, res) => {
   res.sendFile(path.join(distPath, "index.html"));
 });
 
-const port = parseInt(process.env.PORT || "5000", 10);
+const port = parseInt(process.env.PORT || "3000", 10);
 const host = process.env.HOST || "0.0.0.0";
 
 app.listen(port, host, () => {

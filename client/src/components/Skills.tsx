@@ -88,12 +88,6 @@ export default function Skills() {
           
           {/* Tools & Technologies */}
           <div className="space-y-8">
-            <img 
-              src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200" 
-              alt="3D geometric elements and abstract tech shapes" 
-              className="rounded-2xl shadow-lg w-full h-48 object-cover"
-            />
-            
             <div className="backdrop-blur-lg bg-white/5 border border-white/10 p-6 rounded-2xl">
               <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
                 Analytical Tools
