@@ -1,0 +1,27 @@
+{
+  "buildCommand": "npm run vercel:build",
+  "outputDirectory": "dist/client",
+  "framework": "vite",
+  "functions": {},
+  "rewrites": [
+    {
+      "source": "/Resume_Senior_Data_Engineer_1753900296996.pdf",
+      "destination": "/Resume_Senior_Data_Engineer_1753900296996.pdf"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/Resume_Senior_Data_Engineer_1753900296996.pdf",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/pdf"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"Ankur_Kumar_Resume.pdf\""
+        }
+      ]
+    }
+  ]
+}

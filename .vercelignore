@@ -1,0 +1,16 @@
+node_modules
+dist
+.cache
+.git
+.env
+.env.local
+.env.production
+*.log
+.DS_Store
+server/
+shared/
+attached_assets/
+build.js
+start-production.js
+render.yaml
+netlify.toml
